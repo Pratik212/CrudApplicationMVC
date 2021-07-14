@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+<table class="table table-bordered" id="tab1">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">FirstName</th>
+        <th scope="col">LastName</th>
+        <th scope="col">Address</th>
+        <th scope="col">PhoneNumber</th>
+        <th scope="col">City</th>
+    </tr>
+</table>
+
+ID :
+<input type="text" name="studentId" id="studentId" value="" />
+<br />
+First Name :
+<input type="text" name="firstName" id="firstName" value="" />
+<br />
+Last Name :
+<input type="text" name="lastName" id="lastName" value="" />
+<br />
+Address:
+<input type="text" name="address" id="address" value="" />
+<br />
+Phone Number :
+<input type="text" name="phoneNumber" id="phoneNumber" value="" />
+<br />
+City:
+<select name="city" id="city" value="">
+    <option>--- Select Your City ---</option>
+     <option>Surat</option>
+     <option>Ahemdavad</option>
+     <option>Mumbai</option>
+     <option>Dehli</option>
+</select>
+<br />
+
+<input type="button" name="btn" id="btn1" value="Add Employee" />
+<input type="button" name="btn2" id="btn2" value="Delete Employee" />
+<input type="button" name="btn3" id="btn3" value="Update Employee" />
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#tab1").css("display", "none");
+        $.getJSON("/api/student", function (data) {
+            $("#tab1").css("display", "block");
+            $.each(data, function (key, val) {
+                $("<tr><td>" + val.studentId + "</td><td>" + val.firstName + "</td><td>" + val.lastName + "</td><td>" + val.address + "</td><td>" + val.phoneNumber + "</td><td>" + val.city + "</td><tr>").appendTo($("#tab1"));
+            });
+        });
+
+        //POST
+
+        $("#btn1").click(function () {
+            debugger
+            firstName: $("#firstName").val();
+            lastName: $("#lastName").val();
+            address : $("#address").val();
+            phoneNumber: $("#phoneNumber").val();
+            city : $("#city").val();
+
+            $.ajax({
+
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: "/api/student/add",
+                data: JSON.stringify({
+                    firstName: $("#firstName").val(),
+                    lastName: $("#lastName").val(),
+                    address: $("#address").val(),
+                    phoneNumber: $("#phoneNumber").val(),
+                    city: $("#city").val(),
+                }),
+                dataType: "JSON",
+                success: function (data) {
+                    $("#tab1").find("tr:gt(0)").remove();
+                    $.getJSON("/api/student", function (data) {
+                        $("#tab1").css("display", "block");
+                        $.each(data, function (key, val) {
+                            $("<tr><td>" + val.studentId + "</td><td>" + val.firstName + "</td><td>" + val.lastName + "</td><td>" + val.address + "</td><td>" + val.phoneNumber + "</td><td>" + val.city + "</td><tr>").appendTo($("#tab1"));
+                        });
+                    });
+                }
+
+
+            });
+        });
+
+        $("#btn2").click(function () {
+            var studentId = $("#studentId").val();
+
+
+            $.ajax({
+
+                type: "DELETE",
+                contentType: "application/json;charset=utf-8",
+                url: "/api/student/delete/" + $("#studentId").val(),
+                data: JSON.stringify({
+
+                    name: $("#studentId").val(),
+                }),
+                dataType: "JSON",
+                success: function (data) {
+                    $("#tab1").find("tr:gt(0)").remove();
+                    $.getJSON("/api/student", function (data) {
+                        $("#tab1").css("display", "block");
+                        $.each(data, function (key, val) {
+                            $("<tr><td>" + val.studentId + "</td><td>" + val.firstName + "</td><td>" + val.lastName + "</td><td>" + val.address + "</td><td>" + val.phoneNumber + "</td><td>" + val.city + "</td><tr>").appendTo($("#tab1"));
+                        });
+                    });
+                }
+
+
+            });
+        });
+
+        $("#btn3").click(function () {
+            var studentId = $("#studentId").val();
+            firstName: $("#firstName").val();
+            lastName: $("#lastName").val();
+            address: $("#address").val();
+            phoneNumber: $("#phoneNumber").val();
+            city: $("#city").val();
+
+            $.ajax({
+
+                type: "PUT",
+                contentType: "application/json;charset=utf-8",
+                url: "/api/student/update/" + $("#studentId").val(),
+                data: JSON.stringify({
+                    studentId: $('#studentId').val(),
+                    firstName: $("#firstName").val(),
+                    lastName: $("#lastName").val(),
+                    address: $("#address").val(),
+                    phoneNumber: $("#phoneNumber").val(),
+                    city: $("#city").val(),
+                }),
+                dataType: "JSON",
+                success: function (data) {
+                    $("#tab1").find("tr:gt(0)").remove();
+                    $.getJSON("/api/student", function (data) {
+                        $("#tab1").css("display", "block");
+                        $.each(data, function (key, val) {
+                            $("<tr><td>" + val.studentId + "</td><td>" + val.firstName + "</td><td>" + val.lastName + "</td><td>" + val.address + "</td><td>" + val.phoneNumber + "</td><td>" + val.city + "</td><tr>").appendTo($("#tab1"));
+                        });
+                    });
+                }
+
+
+            });
+        });
+
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>

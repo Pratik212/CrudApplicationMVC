@@ -32,6 +32,7 @@ namespace CrudApplication
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IInfoRepository, InfoRepository>();
+            services.AddTransient<IStudentRepository, StudentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
