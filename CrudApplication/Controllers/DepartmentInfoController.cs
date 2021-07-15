@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CrudApplication.Controllers
 {
-    public class StudentInfoController : Controller
+    public class DepartmentInfoController : Controller
     {
         public IActionResult Index()
         {
@@ -17,5 +17,6 @@ namespace CrudApplication.Controllers
         {
             return View();
         }
+
     }
 }

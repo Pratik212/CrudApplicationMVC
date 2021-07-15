@@ -33,6 +33,7 @@ namespace CrudApplication
 
             services.AddTransient<IInfoRepository, InfoRepository>();
             services.AddTransient<IStudentRepository, StudentRepository>();
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
