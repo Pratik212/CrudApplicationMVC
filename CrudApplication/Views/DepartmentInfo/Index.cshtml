@@ -89,6 +89,7 @@
                 }),
                 dataType: "JSON",
                 success: function (data) {
+                    window.location.reload();
                     $("#tab1").find("tr:gt(0)").remove();
                     $.getJSON("/api/department", function (data) {
                         $("#tab1").css("display", "block");
