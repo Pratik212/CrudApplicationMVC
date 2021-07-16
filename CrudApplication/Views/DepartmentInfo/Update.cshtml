@@ -62,6 +62,8 @@
             return obj;
         },
         UpdateAPI: function (serviceurl, onSuccess, onFailed) {
+
+
             $.ajax({
                 type: "GET",
                 url: serviceurl,
@@ -91,6 +93,18 @@
             var url = window.location.pathname;
             var id = url.substring(url.lastIndexOf('/') + 1);
 
+            var departmentName = $("#departmentName").val();
+            var email = $("#email").val();
+
+            $(".error").remove();
+
+            if (departmentName.length < 1) {
+                $('#departmentName').after('<span class="error text-danger">This field is required</span>');
+            }
+            if (email.length < 1) {
+                $('#email').after('<span class="error text-danger">This field is required</span>');
+            }
+
             var obj = {};
             obj.departmentName = $("#departmentName").val();
             obj.email = $("#email").val();
@@ -101,16 +115,13 @@
                 window.location = "http://localhost:5000/DepartmentInfo";
             }
             function onFailed(error) {
-                console.log("error", error.responseJSON.errors.DepartmentName, obj)
-                if (obj.departmentName == '' && obj.email == '') {
-                    window.alert("Both fields are required!");
-                } else {
-                    window.alert(error.responseJSON.errors.DepartmentName || error.responseJSON.errors.Email);
-                }
+                console.log(error);
             }
             return obj;
         },
         UpdateAPI: function (serviceurl, successCallback, errorcallback) {
+
+
             $.ajax({
                 type: "PUT",
                 url: serviceurl,

@@ -140,7 +140,6 @@
                     PhoneNumber: $("#phoneNumber").val()
                 }),
                 success: function (data) {
-
                     window.location = "http://localhost:5000/DepartmentInfo/update/" + data.id;
                 },
                 error: function () {
@@ -163,18 +162,25 @@
     });
     var department2 = {
         updateDepartment2: function (ctl) {
-            var obj = {};
-            var serviceUrl = "http://localhost:5000/api/department/delete/" + ctl;
+            var confirmMessageBox = confirm('Are you sure you wish to delete this record ?');
+            if (confirmMessageBox) {
+                if (ctl != '') {
 
-            window.department2.UpdateAPI(serviceUrl, onSuccess, onFailed);
-            function onSuccess(jsonData) {
-              
-                window.location = "http://localhost:5000/DepartmentInfo";
+                    var obj = {};
+                    var serviceUrl = "http://localhost:5000/api/department/delete/" + ctl;
+
+                    window.department2.UpdateAPI(serviceUrl, onSuccess, onFailed);
+                    function onSuccess(jsonData) {
+
+                        window.location = "http://localhost:5000/DepartmentInfo";
+                    }
+                    function onFailed(error) {
+                        window.alert(error.statusText);
+                    }
+                    return obj;
+                }
             }
-            function onFailed(error) {
-                window.alert(error.statusText);
-            }
-            return obj;
+
         },
         UpdateAPI: function (serviceurl, successCallback, errorcallback) {
             $.ajax({
