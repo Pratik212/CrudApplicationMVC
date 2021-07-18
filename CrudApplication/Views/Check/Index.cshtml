@@ -17,6 +17,7 @@
             <tr>
                 <th>Name</th>
                 <th>Value</th>
+                <th>Action</th>
             </tr>
         </table>
     </div>
@@ -24,70 +25,136 @@
 
 <div id="result"></div>
 
+<input type="text" id="name" name="name" value="" />
 
 <p id="checkBoxes">
-    <input type="checkbox" id="cb1" value="1" />
+    <input name="locationthemes" type="checkbox" id="cb1" value="1" />
     <label for="Checkbox1">Option One</label>
     <br />
-    <input type="checkbox" id="cb2" value="2" />
+    <input name="locationthemes" type="checkbox" id="cb2" value="2" />
     <label for="Checkbox2">Option Two</label>
     <br />
-    <input type="checkbox" id="cb3" value="3" />
+    <input name="locationthemes" type="checkbox" id="cb3" value="3" />
     <label for="Checkbox3">Option Three</label>
     <br />
-    <input type="checkbox" id="cb4" value="4" />
+    <input name="locationthemes" type="checkbox" id="cb4" value="4" />
     <label for="Checkbox4">Option Four</label>
     <br />
 </p>
 
-<input type="button" id="button" name="name" value="GetValue" />
+<input class="btn btn-info" type="button" id="button" name="name" value="GetValue" />
 
-<p id="status" />
+<h4 class="text-danger" id="status" /><br />
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 
 <script>
     $(document).ready(function () {
         $("#button").on('click', function () {
-            var cb = $("#checkBoxes input[type='checkbox']");
-          
-                var selected = [];
-                cb.each(function () {
-                    if (this.checked) {
-                        selected.push($(this).next().text());
-                    }
-                });
-                $("#status").text(selected.join(','));
+            var name = $("#name").val();
+            var value = $("#checkBoxes input[type='checkbox']");
+
+            var selected = [];
+            value.each(function () {
+                if (this.checked) {
+                    selected.push($(this).next().text());
+                }
+            });
+            var commaSeperatedValues = selected.join(',');
+            $("#status").text(commaSeperatedValues);
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: "/api/checks/add",
+                data: JSON.stringify({
+                    name: name,
+                    value: commaSeperatedValues,
+                }),
+                dataType: "JSON",
+                success: function (data) {
+                    $("#tab1").find("tr:gt(0)").remove();
+                    $.getJSON("/api/checks", function (data) {
+                        $("#tab1").css("display", "block");
+                        $.each(data, function (key, val) {
+                            $("<tbody><tr><td>" + val.name + "</td><td>" + val.value + "</td></tr></tbody>").appendTo($("#tab1"));
+                        });
+                    });
+                }
+
+
+            });
         });
     });
 </script>
 
-
-
-<script>
-    $(document).ready(function () {
-
-        $("#btn1").click(function () {
-
-            var chected = new Array();
-            $("[name='chklistitem']").each(function (index, data) {
-                if (data.checked) {
-                    chected.push(data.value + "---" + data.nextSibling.textContent);
-                }
-            });
-            alert(chected);
-        })
-    });
-</script>
 
 <script>
     $(document).ready(function () {
         $.getJSON("/api/checks", function (data) {
             $.each(data, function (key, val) {
-                $("<tr><td>" + val.name + "</td><td>" + val.value + "</td><tr>").appendTo($("#tab1"));
+                $("<tr><td>" + val.name + "</td><td>" + val.value + "</td><td>" + "<button class='btn btn-info' id='update' onclick=check.updateCheck('" + val.id + "')> Update</button> " + " <button class='btn btn-danger' id='delete' onclick=check2.updateheck2('" + val.id + "')> Delete</button>"  + "</td><tr>").appendTo($("#tab1"));
             });
         });
     });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#update").click(function () {
+            check.updateCheck();
+        })
+    });
+    var check = {
+
+        updateCheck: function (ctl) {
+            console.log("CTL", ctl);
+
+            var value = $("#checkBoxes input[type='checkbox']");
+            var selected = [];
+            value.each(function () {
+                if (this.checked) {
+                    selected.push($(this).next().text());
+                }
+            });
+            var commaSeperatedValues = selected.join(',');
+
+
+            var confirmMessageBox = confirm('Are you sure you wish to update this record ?');
+            if (confirmMessageBox) {
+                if (ctl != '') {
+                    var obj = "";
+                    var serviceUrl = "http://localhost:5000/api/checks/" + ctl;
+
+                    window.check.UpdateAPI(serviceUrl, onSuccess, onFailed);
+                    function onSuccess(jsonData) {
+                        window.location = "http://localhost:5000/check/update/" + jsonData.id;
+                    }
+                    function onFailed(error) {
+                        alert('error');
+                    }
+                    return obj;
+                }
+            }
+        },
+        UpdateAPI: function (serviceurl, onSuccess, onFailed) {
+            $.ajax({
+                type: "GET",
+                url: serviceurl,
+                dataType: "json",
+                data: JSON.stringify({ //Passing data
+                    name: $("#name").val(), //Reading text box values using Jquery
+                    value: $("#checkBoxes").val(),
+                }),
+                success: onSuccess,
+                error: onFailed,
+
+            });
+
+        }
+    }
+
+
 </script>
 
 

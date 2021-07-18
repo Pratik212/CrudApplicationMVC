@@ -9,5 +9,9 @@ namespace CrudApplication.Interfaces
     public interface IChecksRepository
     {
         Task<IEnumerable<Check>> GetAll();
+        
+        Task<Check> AddCheck(Check check);
+
+        Task<Check> GetValueById(int id);
     }
 }

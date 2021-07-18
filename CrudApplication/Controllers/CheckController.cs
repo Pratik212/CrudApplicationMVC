@@ -23,5 +23,10 @@ namespace CrudApplication.Controllers
 
             return View(objList);
         }
+
+        public IActionResult Update()
+        {
+            return View();
+        }
     }
 }

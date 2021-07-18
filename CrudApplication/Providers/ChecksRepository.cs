@@ -17,9 +17,24 @@ namespace CrudApplication.Providers
         {
             _context = context;
         }
+
+        public async Task<Check> AddCheck(Check check)
+        {
+            var checkObj = await _context.Checks.AddAsync(check);
+
+            _context.SaveChanges();
+
+            return checkObj.Entity;
+        }
+
         public async Task<IEnumerable<Check>> GetAll()
         {
             return await _context.Checks.ToListAsync();
+        }
+
+        public async Task<Check> GetValueById(int id)
+        {
+            return await _context.Checks.FirstOrDefaultAsync(x=>x.Id == id);
         }
     }
 }

@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Update</h1>
+
+<div>
+    <div class="panel-heading">
+        <h4 class="text-center text-danger">Check List</h4>
+    </div>
+    <div class="d-flex justify-content-end mb-3">
+        <a asp-controller="StudentView" asp-action="" class="btn btn-info mt-3 ml-">Add</a>
+    </div>
+    <div>
+        <table class="table table-bordered container" id="tab1">
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div id="result"></div>
+
+<input type="text" id="name" name="name" value="" />
+
+<div id="checkBoxes">
+    <input type="checkbox" id="cb1" value="1" />
+    <label for="Checkbox1">Option One</label>
+    <br />
+    <input type="checkbox" id="cb2" value="2" />
+    <label for="Checkbox2">Option Two</label>
+    <br />
+    <input type="checkbox" id="cb3" value="3" />
+    <label for="Checkbox3">Option Three</label>
+    <br />
+    <input type="checkbox" id="cb4" value="4" />
+    <label for="Checkbox4">Option Four</label>
+    <br />
+</div>
+
+<input class="btn btn-info" type="button" id="button" name="name" value="GetValue" />
+
+<h4 class="text-danger" id="status" />
+<br />
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        check.updateCheck();
+    });
+    var check = {
+
+        updateCheck: function (ctl) {
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+            console.log("CTL", id);
+
+            var obj = "";
+            var serviceUrl = "http://localhost:5000/api/checks/" + id;
+
+            window.check.UpdateAPI(serviceUrl, onSuccess, onFailed);
+            function onSuccess(jsonData) {
+                console.log(jsonData.value)
+               
+                $("#name").val(jsonData.name);
+                $('#checkBoxes').val(jsonData.value);
+            }
+            function onFailed(error) {
+                window.alert("error");
+            }
+            return obj;
+        },
+        UpdateAPI: function (serviceurl, onSuccess, onFailed) {
+
+
+            $.ajax({
+                type: "GET",
+                url: serviceurl,
+                dataType: "json",
+                success: onSuccess,
+
+                error: onFailed,
+
+            });
+
+        }
+    }
+
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
