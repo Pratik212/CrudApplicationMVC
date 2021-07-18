@@ -35,7 +35,8 @@ namespace CrudApplication.Controllers
             {
                 x.Id,
                 x.Name,
-                x.Fname
+                x.Fname,
+                x.Gender
             });
 
             return Ok(result);
@@ -51,17 +52,18 @@ namespace CrudApplication.Controllers
             var infoObj = new Info()
             {
                 Name = infoDto.Name,
-                Fname = infoDto.Fname
+                Fname = infoDto.Fname,
+                Gender = infoDto.Gender
             };
 
             await _infoRepository.AddInfo(infoObj);
-            _infoRepository.SaveChanges();
 
             return Ok(new
             {
                 infoObj.Id,
                 infoObj.Name,
-                infoObj.Fname
+                infoObj.Fname,
+                infoObj.Gender
             });
         }
 
@@ -102,10 +104,7 @@ namespace CrudApplication.Controllers
 
         public async Task<ActionResult<Info>> DeleteInfo(int id , Info info)
         {
-          
-
             var infoDelete = await _infoRepository.GetById(id);
-
 
             if (infoDelete == null)
             {

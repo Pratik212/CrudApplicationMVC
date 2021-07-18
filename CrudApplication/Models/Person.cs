@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 namespace CrudApplication.Models
 {
-    public class Info
+    public class Person
     {
-        public int Id { get; set; }
+
+        public Nullable<long> PersonId { get; set; }
+
+        public bool Selected { get; set; }
 
         public string Name { get; set; }
 
-        public string Fname { get; set; }
-        public string Gender { get; set; }
     }
 }
